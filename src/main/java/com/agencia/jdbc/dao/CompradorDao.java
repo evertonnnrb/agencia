@@ -75,18 +75,45 @@ public class CompradorDao implements Dao<Comprador> {
         String sql = "select nome,cpf from comprador where id = ?";
         try (PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, id);
-            ResultSet rs = pst.executeQuery();
-            if (rs.next()) {
-                Comprador comprador = new Comprador();
-                comprador.setCpf(rs.getString("cpf"));
-                comprador.setNome(rs.getString("nome"));
-                return comprador;
-            }
+            Comprador comprador = createcomprador(pst);
+            if (comprador != null) return comprador;
         } catch (SQLException e) {
             throw new DBException(e.getMessage());
         }
         return null;
     }
 
-    public List<Comprador> find
+    public List<Comprador> findListLikeNames(String name) {
+        String sql = "select * from comprador where nome like ?";
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setString(1, name);
+            return createCompradorList(pst);
+        } catch (SQLException e) {
+            throw new DBException(e.getMessage());
+        }
+    }
+
+    private static Comprador createcomprador(PreparedStatement pst) throws SQLException {
+        ResultSet rs = pst.executeQuery();
+        if (rs.next()) {
+            Comprador comprador = new Comprador();
+            comprador.setCpf(rs.getString("cpf"));
+            comprador.setNome(rs.getString("nome"));
+            return comprador;
+        }
+        return null;
+    }
+
+    private static List<Comprador> createCompradorList(PreparedStatement pst) throws SQLException {
+        ResultSet rs = pst.executeQuery();
+        List<Comprador> compradorList = new ArrayList<>();
+        while (rs.next()) {
+            Comprador comprador = new Comprador();
+            comprador.setId(rs.getInt("id"));
+            comprador.setNome(rs.getString("nome"));
+            comprador.setCpf(rs.getString("cpf"));
+            compradorList.add(comprador);
+        }
+        return compradorList;
+    }
 }
