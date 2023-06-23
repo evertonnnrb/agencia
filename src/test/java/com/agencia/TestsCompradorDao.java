@@ -41,6 +41,18 @@ public class TestsCompradorDao {
     }
 
     @Test
+    public void testFindByName() {
+        System.out.println(dao.findByName("go"));
+        Assert.assertNotNull(dao.findByName("go"));
+    }
+
+    @Test
+    public void testBuscarPeloCpf() {
+        System.out.println(dao.findByCpf("999.020.000/32"));
+        Assert.assertNotNull(dao.findByCpf("999.020.000/32"));
+    }
+
+    @Test
     public void findListByNames() {
         String name = "g%";
         for (Comprador cp : dao.findListLikeNames(name)) {

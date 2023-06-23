@@ -6,4 +6,6 @@ insert into comprador(cpf,nome)values('883.020.000/32','Inesta Chavi');
 insert into comprador(cpf,nome)values('199.993.232/22','Igor Gomes');
 insert into comprador(cpf,nome)values('002.200.111/33','Diego Costa');
 insert into comprador(cpf,nome)values('839.300.111/88','Pablo Maia');
+insert into comprador(cpf,nome)values('331.999.131/88','Gustavo Scarpa');
+insert into comprador(cpf,nome)values('000.000.000/00','Null Null');
 select nome,cpf from comprador where id = 12;

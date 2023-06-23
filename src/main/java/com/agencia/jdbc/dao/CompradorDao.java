@@ -83,8 +83,27 @@ public class CompradorDao implements Dao<Comprador> {
         return null;
     }
 
+    public Comprador findByName(String name){
+        String sql = "select * from comprador where nome like '%"+name+"%'";
+        try(PreparedStatement pst = conn.prepareStatement(sql)){
+            return createcomprador(pst);
+        }catch (SQLException e){
+            throw new DBException(e.getMessage());
+        }
+    }
+
+    public Comprador findByCpf(String cpf){
+        String sql = "select * from comprador where cpf = ?";
+        try(PreparedStatement pst = conn.prepareStatement(sql)){
+            pst.setString(1, cpf);
+            return createcomprador(pst);
+        }catch (SQLException e){
+            throw new DBException(e.getMessage());
+        }
+    }
+
     public List<Comprador> findListLikeNames(String name) {
-        String sql = "select * from comprador where nome like ?";
+        String sql = "select * from comprador where nome like ? ";
         try (PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setString(1, name);
             return createCompradorList(pst);
@@ -101,6 +120,7 @@ public class CompradorDao implements Dao<Comprador> {
             comprador.setNome(rs.getString("nome"));
             return comprador;
         }
+        rs.close();
         return null;
     }
 
@@ -114,6 +134,7 @@ public class CompradorDao implements Dao<Comprador> {
             comprador.setCpf(rs.getString("cpf"));
             compradorList.add(comprador);
         }
+        rs.close();
         return compradorList;
     }
 }
